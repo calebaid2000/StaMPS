@@ -18,7 +18,8 @@ arch=computer('arch');
 if strcmpi(arch(1:3),'win')
     use_triangle='n';
 else
-    tripath=system('which triangle >& /dev/null');
+    %tripath=system('which triangle >& /dev/null');
+    [~, tripath] = system('which triangle');
     if tripath==0
         use_triangle='y';
     else
