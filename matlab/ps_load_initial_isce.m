@@ -30,7 +30,7 @@ phname=['pscands.1.ph'];            % for each PS candidate, a float complex val
 ijname=['pscands.1.ij'];            % ID# Azimuth# Range# 1 line per PS candidate
 bperpname=['bperp.1.in'];           % in meters 1 line per ifg
 dayname=['day.1.in'];               % YYYYMMDD, 1 line per ifg
-masterdayname=['master_day.1.in'];  % YYYYMMDD
+referencedayname=['reference_day.1.in'];  % YYYYMMDD
 llname=['pscands.1.ll'];            % 2 float values (lon and lat) per PS candidate
 daname=['pscands.1.da'];            % 1 float value per PS candidate
 hgtname=['pscands.1.hgt'];          % 1 float value per PS candidate
@@ -60,18 +60,18 @@ monthday=day-year*10000-month*100;
 slave_day=datenum(year,month,monthday);
 [slave_day,day_ix]=sort(slave_day);
 
-if ~exist(masterdayname,'file')
-    masterdayname= ['../',masterdayname];
+if ~exist(referencedayname,'file')
+    referencedayname= ['../',referencedayname];
 end
-master_day=load(masterdayname);
-master_day_yyyymmdd=master_day;
-year=floor(master_day/10000);
-month=floor((master_day-year*10000)/100);
-monthday=master_day-year*10000-month*100;
-master_day=datenum(year,month,monthday);
+reference_day=load(referencedayname);
+master_day_yyyymmdd=reference_day;
+year=floor(reference_day/10000);
+month=floor((reference_day-year*10000)/100);
+monthday=reference_day-year*10000-month*100;
+reference_day=datenum(year,month,monthday);
 
-master_ix=sum(slave_day<master_day)+1;
-day=[slave_day(1:master_ix-1);master_day;slave_day(master_ix:end)]; % insert master day
+master_ix=sum(slave_day<reference_day)+1;
+day=[slave_day(1:master_ix-1);reference_day;slave_day(master_ix:end)]; % insert master day
 
 
 %% bperp one value per slave
@@ -118,12 +118,15 @@ if exist(calname,'file')
             if isempty(bb)
                 bb=str2num(aa{end-1}(1:8));
             end
+            caldate(i)=bb;
         catch
-            if strcmpi(aa{end-1},'master');
+            if strcmpi(aa{end-1},'reference')
                 bb=str2num(aa{end-2}(end-7:end));
-            end            
+            end
+            caldate(i)=bb;
         end
-        caldate(i)=bb;    
+        
+            
     end
     not_master_ix=caldate~=master_day_yyyymmdd;
     caldate=caldate(not_master_ix);
@@ -193,7 +196,7 @@ ij(:,1)=1:n_ps;
 lonlat=lonlat(sort_ix,:);
 
 savename=['ps',num2str(psver)];
-stamps_save(savename,ij,lonlat,xy,bperp,day,master_day,master_ix,n_ifg,n_image,n_ps,sort_ix,ll0,calconst,master_ix,day_ix);
+stamps_save(savename,ij,lonlat,xy,bperp,day,reference_day,master_ix,n_ifg,n_image,n_ps,sort_ix,ll0,calconst,master_ix,day_ix);
 save psver psver
 
 phsavename=['ph',num2str(psver)];

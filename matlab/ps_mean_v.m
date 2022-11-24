@@ -189,7 +189,11 @@ if rank(ifg_cov)<size(ifg_cov,1)
 end
 
 if use_small_baselines==0
-    day=ps.day(unwrap_ifg_index)-ps.master_day;
+    try
+        day=ps.day(unwrap_ifg_index)-ps.master_day;
+    catch
+        day=ps.day(unwrap_ifg_index)-ps.reference_day;
+    end
 else 
     day=ps.day(ps.ifgday_ix(unwrap_ifg_index,2))-ps.day(ps.ifgday_ix(unwrap_ifg_index,1));
 end

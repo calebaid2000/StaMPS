@@ -32,7 +32,12 @@ else
 end
 
 n_ps=length(ps.xy);
-master_ix=sum(ps.master_day>ps.day)+1;
+% master_ix=sum(ps.master_day>ps.day)+1;
+try
+    master_ix=sum(ps.master_day>ps.day)+1;
+catch
+    master_ix=sum(ps.reference_day>ps.day)+1;
+end
 
 if strcmpi(small_baseline_flag,'y')
     ph_diff=angle(ph.*conj(pm.ph_patch).*exp(-j*(repmat(pm.K_ps,1,ps.n_ifg).*bp.bperp_mat)));    

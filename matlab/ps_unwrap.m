@@ -93,7 +93,11 @@ ph_w(ix)=ph_w(ix)./abs(ph_w(ix)); % normalize, to avoid high freq artifacts bein
 scla_subtracted_sw=0;
 ramp_subtracted_sw=0;
 
-options=struct('master_day',ps.master_day);
+try
+    options=struct('master_day',ps.master_day);
+catch
+    options=struct('master_day',ps.reference_day);
+end
 unwrap_hold_good_values=getparm('unwrap_hold_good_values',1);
 if ~strcmpi(small_baseline_flag,'y') | ~exist(phuwname)
     unwrap_hold_good_values='n';
@@ -220,10 +224,19 @@ else
     lowfilt_flag='n';
     %ifgday_ix=[];
     ifgday_ix=[ones(ps.n_ifg,1)*ps.master_ix,[1:ps.n_ifg]'];
-    master_ix=sum(ps.master_day>ps.day)+1;
+    %master_ix=sum(ps.master_day>ps.day)+1;
+    try
+        master_ix=sum(ps.master_day>ps.day)+1;
+    catch
+        master_ix=sum(ps.reference_day>ps.day)+1;
+    end
     unwrap_ifg_index=setdiff(unwrap_ifg_index,master_ix); % leave master ifg (which is only noise) out
     %day=ps.day(unwrap_ifg_index)-ps.master_day;
-    day=ps.day-ps.master_day;
+    try
+        day=ps.day-ps.master_day;
+    catch
+        day=ps.day-ps.reference_day;
+    end
 end
 
 if unwrap_hold_good_values=='y'

@@ -321,7 +321,11 @@ meanvname=['./mv',num2str(psver)];
 
 ps=load(psname);
 day=ps.day;
-master_day=ps.master_day;
+try
+    master_day=ps.master_day;
+catch
+    master_day=ps.reference_day;
+end
 xy=ps.xy;
 lonlat=ps.lonlat;
 n_ps=ps.n_ps;

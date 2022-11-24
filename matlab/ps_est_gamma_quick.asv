@@ -119,7 +119,6 @@ if exist(incname,'file')
     fprintf('Found inc angle file \n')
     inc=load(incname);
     inc_mean=mean(inc.inc(inc.inc~=0));
-    %inc_mean=mean(inc.inc(inc.inc>0));
     clear inc
 else
     if exist(laname,'file')

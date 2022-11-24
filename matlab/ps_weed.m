@@ -89,7 +89,12 @@ end
 
 day=ps.day;
 bperp=ps.bperp;
-master_day=ps.master_day;
+try
+    master_day=ps.master_day;
+catch
+    master_day=ps.reference_day;
+end
+
 
 if isfield(sl,'keep_ix')
     ix2=sl.ix(sl.keep_ix);
@@ -294,7 +299,8 @@ if n_ps~=0
         if strcmpi(arch(1:3),'win')
             use_triangle='n';
         else
-            tripath=system('which triangle >& /dev/null');
+            %tripath=system('which triangle >& /dev/null');
+            [~, tripath] = system('which triangle');
             if tripath==0
                 use_triangle='y';
             else

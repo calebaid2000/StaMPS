@@ -67,7 +67,8 @@ end
 
 fclose(fid);
 
-system('triangle -e scnfilt.1.node > triangle_scn.log');
+% system('triangle -e scnfilt.1.node > triangle_scn.log');
+!triangle -e scnfilt.1.node
 
 fid=fopen('scnfilt.2.edge','r');
 header=str2num(fgetl(fid));

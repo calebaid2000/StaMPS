@@ -36,7 +36,11 @@ end
 
 K_ps=single(pm.K_ps);
 C_ps=single(pm.C_ps);
-master_ix=sum(ps.master_day>ps.day)+1;
+try
+    master_ix=sum(ps.master_day>ps.day)+1;
+catch
+    master_ix=sum(ps.reference_day>ps.day)+1;
+end
 
 if strcmpi(small_baseline_flag,'y')
     %ph_rc=ph.*exp(-j*(repmat(K_ps,1,ps.n_ifg).*bp.bperp_mat));  % subtract range error 
